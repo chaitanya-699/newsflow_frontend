@@ -23,7 +23,6 @@ export default function CategorySection({
   categoryId 
 }: CategorySectionProps) {
 
-  console.log(onArticleClick);
   return (
     <section className="mb-12">
       <div className="flex items-center justify-between mb-6">
