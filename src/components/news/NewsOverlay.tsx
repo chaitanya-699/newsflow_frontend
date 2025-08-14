@@ -28,6 +28,8 @@ export default function NewsOverlay({
   const [isTyping, setIsTyping] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [leftWidth, setLeftWidth] = useState(65); // % of screen width
+  const [isMobile, setIsMobile] = useState(false);
+  const [isMobileChatOpen, setIsMobileChatOpen] = useState(false);
   const isResizing = useRef(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -60,6 +62,13 @@ export default function NewsOverlay({
       document.body.style.overflow = "unset";
     };
   }, [isOpen, isAnimating]);
+
+  useEffect(() => {
+    const updateIsMobile = () => setIsMobile(window.innerWidth < 768);
+    updateIsMobile();
+    window.addEventListener("resize", updateIsMobile);
+    return () => window.removeEventListener("resize", updateIsMobile);
+  }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -140,10 +149,20 @@ export default function NewsOverlay({
         {/* Left Pane */}
         <div
           className="bg-card overflow-y-auto"
-          style={{ width: `${leftWidth}%` }}
+          style={{ width: isMobile ? "100%" : `${leftWidth}%` }}
         >
           <div className="sticky top-0 bg-card border-b border-border p-4 flex items-center justify-between backdrop-blur-md bg-card/90">
-            <h1 className="text-lg font-semibold text-foreground">Article</h1>
+            <div className="flex items-center gap-2">
+              <button
+                className="md:hidden inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-transparent text-foreground/80 hover:bg-muted hover:text-accent transition-colors duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-accent/40 shadow-sm"
+                aria-label="Open AI Assistant"
+                title="Open AI Assistant"
+                onClick={() => setIsMobileChatOpen(true)}
+              >
+                <span className="text-lg">🤖</span>
+              </button>
+              <h1 className="text-lg font-semibold text-foreground">Article</h1>
+            </div>
             <button onClick={onClose} className="p-2 hover:bg-muted rounded-lg">
               ✕
             </button>
@@ -202,16 +221,90 @@ export default function NewsOverlay({
         {/* Resizer */}
         <div
           onMouseDown={handleMouseDown}
-          className="w-1 bg-gray-300 cursor-col-resize hover:bg-gray-400"
+          className="hidden md:block w-1 bg-gray-300 cursor-col-resize hover:bg-gray-400"
         />
 
         {/* Right Pane */}
         <div
-          className="bg-card border-l border-border flex flex-col"
+          className="hidden md:flex bg-card border-l border-border flex-col"
           style={{ width: `${100 - leftWidth}%` }}
         >
           <div className="p-4 border-b border-border">
             <h2 className="text-lg font-semibold">AI Assistant</h2>
+          </div>
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            {messages.map((m) => (
+              <div key={m.id} className={m.type === "user" ? "text-right" : ""}>
+                <div
+                  className={`inline-block p-3 rounded-lg ${
+                    m.type === "user" ? "bg-accent text-white" : "bg-muted"
+                  }`}
+                >
+                  {m.content}
+                </div>
+              </div>
+            ))}
+            {isTyping && (
+              <div className="text-sm text-gray-500">AI is typing...</div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+          <div className="p-4 border-t border-border">
+            <div className="grid grid-cols-2 gap-2 mb-4">
+              {predefinedQuestions.map((q, i) => (
+                <Button
+                  key={i}
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleSendMessage(q)}
+                  disabled={isTyping}
+                >
+                  {q}
+                </Button>
+              ))}
+            </div>
+            <div className="flex space-x-2">
+              <input
+                ref={inputRef}
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                className="flex-1 px-3 py-2 border rounded-lg"
+                placeholder="Ask something..."
+              />
+              <Button
+                onClick={() => handleSendMessage()}
+                disabled={!inputValue.trim() || isTyping}
+              >
+                Send
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile AI Chat Drawer */}
+      <div
+        className={`md:hidden fixed inset-0 z-50 transform transition-transform duration-300 ${
+          isMobileChatOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+        style={{ backgroundColor: "var(--card-bg)" }}
+        aria-hidden={!isMobileChatOpen}
+      >
+        <div className="flex h-full w-full flex-col">
+          <div className="p-4 border-b border-border flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <button
+                className="p-2 rounded-lg hover:bg-muted"
+                aria-label="Back to article"
+                onClick={() => setIsMobileChatOpen(false)}
+              >
+                ←
+              </button>
+              <h2 className="text-lg font-semibold">AI Assistant</h2>
+            </div>
+            <button onClick={onClose} className="p-2 hover:bg-muted rounded-lg">✕</button>
           </div>
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
             {messages.map((m) => (
