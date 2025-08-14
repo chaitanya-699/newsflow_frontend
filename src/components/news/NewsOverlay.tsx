@@ -141,29 +141,34 @@ export default function NewsOverlay({
 
   return (
     <div
-      className={`fixed inset-0 bg-black z-50 flex transition-all duration-400 ${
-        isOpen ? "bg-opacity-50 backdrop-blur-sm" : "bg-opacity-0"
+      className={`fixed inset-0 z-50 flex transition-all duration-400 ${
+        isOpen ? "backdrop-blur-sm" : ""
       }`}
+      style={{ backgroundColor: isOpen ? "rgba(0,0,0,0.5)" : "transparent" }}
     >
       <div className="flex h-full w-full" style={{ transition: "none" }}>
         {/* Left Pane */}
         <div
-          className="bg-card overflow-y-auto"
-          style={{ width: isMobile ? "100%" : `${leftWidth}%` }}
+          className="overflow-y-auto"
+          style={{ backgroundColor: 'var(--card-bg)', width: isMobile ? "100%" : `${leftWidth}%` }}
         >
-          <div className="sticky top-0 bg-card border-b border-border p-4 flex items-center justify-between backdrop-blur-md bg-card/90">
+          <div
+            className="sticky top-0 p-4 flex items-center justify-between backdrop-blur-md"
+            style={{ backgroundColor: 'var(--card-bg)', borderBottom: '1px solid var(--border)' }}
+          >
             <div className="flex items-center gap-2">
               <button
-                className="md:hidden inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-transparent text-foreground/80 hover:bg-muted hover:text-accent transition-colors duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-accent/40 shadow-sm"
+                className="md:hidden inline-flex h-9 w-9 items-center justify-center rounded-full bg-transparent transition-colors duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-[rgba(255,107,53,0.4)] shadow-sm"
+                style={{ color: 'var(--foreground)', border: '1px solid var(--border)' }}
                 aria-label="Open AI Assistant"
                 title="Open AI Assistant"
                 onClick={() => setIsMobileChatOpen(true)}
               >
                 <span className="text-lg">🤖</span>
               </button>
-              <h1 className="text-lg font-semibold text-foreground">Article</h1>
+              <h1 className="text-lg font-semibold" style={{ color: 'var(--foreground)' }}>Article</h1>
             </div>
-            <button onClick={onClose} className="p-2 hover:bg-muted rounded-lg">
+            <button onClick={onClose} className="p-2 rounded-lg hover:bg-[var(--muted)]" style={{ color: 'var(--foreground)' }}>
               ✕
             </button>
           </div>
@@ -179,7 +184,7 @@ export default function NewsOverlay({
               {article.category}
             </span>
             <h1 className="text-3xl font-bold mt-4">{article.title}</h1>
-            <div className="text-sm text-gray-500 mt-2">
+            <div className="text-sm mt-2" style={{ color: 'var(--text-secondary)' }}>
               By {article.author} • {article.sourceName} •{" "}
               {new Date(article.publishedAt).toLocaleDateString()}
             </div>
@@ -190,7 +195,7 @@ export default function NewsOverlay({
                 </p>
               ))}
             </div>
-            <div className="mt-8 pt-6 border-t border-border">
+            <div className="mt-8 pt-6" style={{ borderTop: '1px solid var(--border)' }}>
               {" "}
               <Button
                 variant="outline"
@@ -221,16 +226,17 @@ export default function NewsOverlay({
         {/* Resizer */}
         <div
           onMouseDown={handleMouseDown}
-          className="hidden md:block w-1 bg-gray-300 cursor-col-resize hover:bg-gray-400"
+          className="hidden md:block w-1 cursor-col-resize with-surface-border"
+          style={{ backgroundColor: 'var(--border)', opacity: 0.6 }}
         />
 
         {/* Right Pane */}
         <div
-          className="hidden md:flex bg-card border-l border-border flex-col"
-          style={{ width: `${100 - leftWidth}%` }}
+          className="hidden md:flex flex-col with-surface-border"
+          style={{ width: `${100 - leftWidth}%`, backgroundColor: 'var(--card-bg)', borderLeft: '1px solid var(--border)' }}
         >
-          <div className="p-4 border-b border-border">
-            <h2 className="text-lg font-semibold">AI Assistant</h2>
+          <div className="p-4" style={{ borderBottom: '1px solid var(--border)' }}>
+            <h2 className="text-lg font-semibold" style={{ color: 'var(--foreground)' }}>AI Assistant</h2>
           </div>
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
             {messages.map((m) => (
@@ -245,11 +251,11 @@ export default function NewsOverlay({
               </div>
             ))}
             {isTyping && (
-              <div className="text-sm text-gray-500">AI is typing...</div>
+              <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>AI is typing...</div>
             )}
             <div ref={messagesEndRef} />
           </div>
-          <div className="p-4 border-t border-border">
+          <div className="p-4" style={{ borderTop: '1px solid var(--border)' }}>
             <div className="grid grid-cols-2 gap-2 mb-4">
               {predefinedQuestions.map((q, i) => (
                 <Button
@@ -270,7 +276,12 @@ export default function NewsOverlay({
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-                className="flex-1 px-3 py-2 border rounded-lg"
+                className="flex-1 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[rgba(255,107,53,0.2)]"
+                style={{
+                  backgroundColor: 'var(--muted)',
+                  color: 'var(--foreground)',
+                  border: '1px solid var(--border)'
+                }}
                 placeholder="Ask something..."
               />
               <Button
@@ -293,18 +304,18 @@ export default function NewsOverlay({
         aria-hidden={!isMobileChatOpen}
       >
         <div className="flex h-full w-full flex-col">
-          <div className="p-4 border-b border-border flex items-center justify-between">
+          <div className="p-4 flex items-center justify-between" style={{ borderBottom: '1px solid var(--border)' }}>
             <div className="flex items-center gap-2">
               <button
-                className="p-2 rounded-lg hover:bg-muted"
+                className="p-2 rounded-lg hover:bg-[var(--muted)]"
                 aria-label="Back to article"
                 onClick={() => setIsMobileChatOpen(false)}
               >
                 ←
               </button>
-              <h2 className="text-lg font-semibold">AI Assistant</h2>
+              <h2 className="text-lg font-semibold" style={{ color: 'var(--foreground)' }}>AI Assistant</h2>
             </div>
-            <button onClick={onClose} className="p-2 hover:bg-muted rounded-lg">✕</button>
+            <button onClick={onClose} className="p-2 rounded-lg hover:bg-[var(--muted)]" style={{ color: 'var(--foreground)' }}>✕</button>
           </div>
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
             {messages.map((m) => (
@@ -319,11 +330,11 @@ export default function NewsOverlay({
               </div>
             ))}
             {isTyping && (
-              <div className="text-sm text-gray-500">AI is typing...</div>
+              <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>AI is typing...</div>
             )}
             <div ref={messagesEndRef} />
           </div>
-          <div className="p-4 border-t border-border">
+          <div className="p-4" style={{ borderTop: '1px solid var(--border)' }}>
             <div className="grid grid-cols-2 gap-2 mb-4">
               {predefinedQuestions.map((q, i) => (
                 <Button
@@ -344,7 +355,12 @@ export default function NewsOverlay({
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-                className="flex-1 px-3 py-2 border rounded-lg"
+                className="flex-1 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[rgba(255,107,53,0.2)]"
+                style={{
+                  backgroundColor: 'var(--muted)',
+                  color: 'var(--foreground)',
+                  border: '1px solid var(--border)'
+                }}
                 placeholder="Ask something..."
               />
               <Button

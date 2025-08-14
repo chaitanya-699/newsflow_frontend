@@ -51,13 +51,13 @@ export default function ProfileSidebar({ isOpen, onClose }: ProfileSidebarProps)
       
       {/* Sidebar */}
       <div 
-        className={`fixed right-0 top-0 h-full w-80 border-l z-[70] transform transition-all duration-400 ease-out profile-sidebar ${
+        className={`fixed right-0 top-0 h-full w-80 border-l z-[70] transform transition-all duration-400 ease-out profile-sidebar with-surface-border ${
           isOpen ? 'translate-x-0 opacity-100 scale-100' : 'translate-x-full opacity-0 scale-95'
         }`}
       >
         <div className="p-6">
           {/* Header */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-6" style={{ borderBottom: '1px solid var(--border)' }}>
             <h2 className="text-lg font-semibold profile-sidebar-text">Profile</h2>
             <button
               onClick={onClose}
@@ -101,7 +101,7 @@ export default function ProfileSidebar({ isOpen, onClose }: ProfileSidebarProps)
             {['Settings', 'Preferences', 'Help & Support', 'About'].map((item) => (
               <button 
                 key={item}
-                className="w-full text-left px-3 py-2 rounded-lg profile-sidebar-menu-button"
+                className="w-full text-left px-3 py-2 rounded-lg profile-sidebar-menu-button with-surface-border"
               >
                 {item}
               </button>

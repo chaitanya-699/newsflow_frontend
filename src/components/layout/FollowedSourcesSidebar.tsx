@@ -71,14 +71,13 @@ export default function FollowedSourcesSidebar({
 
       {/* Top-Right Corner Dropdown */}
       <div
-        className={`fixed -top-7 -right-7 w-96 max-h-[85vh] z-[9999] transform transition-all duration-300 ease-out rounded-xl shadow-2xl ${
+        className={`fixed right-2 top-2 md:-top-7 md:-right-7 w-[calc(100%-1rem)] md:w-96 max-h-[85vh] z-[9999] transform transition-all duration-300 ease-out rounded-xl shadow-2xl with-surface-border ${
           isOpen
             ? "translate-x-0 translate-y-0 opacity-100 scale-100"
             : "translate-x-4 -translate-y-4 opacity-0 scale-95"
         }`}
         style={{
           backgroundColor: "var(--card-bg)",
-          border: "1px solid var(--border)",
           boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.6)",
         }}
       >

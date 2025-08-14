@@ -25,10 +25,10 @@ export default function CategorySection({
 
   return (
     <section className="mb-12">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-foreground">{title}</h2>
+      <div className="flex items-center justify-between mb-6 gap-3">
+        <h2 className="text-xl sm:text-2xl font-bold text-foreground">{title}</h2>
         {categoryId && (
-          <Link href={`/${name}/${categoryId.split('-')[1]}`}>
+          <Link href={`/${name}/${categoryId.split('-')[1]}`} className="shrink-0">
             <Button variant="ghost" size="sm">
               View All
               <svg className="h-4 w-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

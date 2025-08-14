@@ -91,7 +91,7 @@ export default function HorizontalCarousel({
       <div className="overflow-hidden">
         <div
           ref={containerRef}
-          className="flex space-x-6 overflow-x-auto scroll-smooth scrollbar-hide"
+          className="flex space-x-5 overflow-x-auto scroll-smooth scrollbar-hide pl-5"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           role="region"
           aria-label="News articles carousel"

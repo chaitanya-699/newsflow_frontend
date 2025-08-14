@@ -1,15 +1,43 @@
 @import "tailwindcss";
 
-:root {
-  --background: #121212;       /* Neutral deep background for minimal eye strain */
-  --foreground: #e0e0e0;       /* Soft white for high readability */
-  --card-bg: #252525;          /* More distinct from background for better contrast */
-  --border: #2c2c2c;           /* Subtle borders to separate elements */
-  --muted: #2a2a2a;            /* Muted background for secondary content */
-  --accent: #ff6b35;           /* Vibrant orange for calls to action, matches news urgency */
-  --accent-hover: #ff814f;     /* Slightly lighter for hover states */
-  --text-secondary: #b3b3b3;   /* Secondary text for timestamps, bylines, etc. */
-  --shadow: rgba(0, 0, 0, 0.5);/* Stronger shadow for card depth */
+/* Default to dark theme */
+:root,
+[data-theme="dark"] {
+  --background: #121212;
+  --foreground: #e0e0e0;
+  --card-bg: #252525;
+  --border: #2c2c2c;
+  --muted: #2a2a2a;
+  --accent: #ff6b35;
+  --accent-hover: #ff814f;
+  --text-secondary: #6b7280; /* slightly dimmer secondary in dark */
+  --shadow: rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="light"] {
+  --background: #f7f7f8;
+  --foreground: #0f172a;
+  --card-bg: #ffffff;
+  --border: rgba(0, 0, 0, 0.299);
+  --muted: #f1f5f9;
+  --accent: #ff6b35;
+  --accent-hover: #ff814f;
+  --text-secondary: #475569;
+  --shadow: rgba(0, 0, 0, 0.15);
+}
+
+/* Ensure Tailwind's border-border token respects theme variable */
+.border-border {
+  border-color: var(--border) !important;
+}
+
+/* Subtle borders for surfaces in light theme */
+[data-theme="light"] .card-hover,
+[data-theme="light"] .discover-card,
+[data-theme="light"] .followed-source-item,
+[data-theme="light"] .following-dropdown,
+[data-theme="light"] .with-surface-border {
+  border: 1px solid var(--border);
 }
 
 body {
@@ -313,11 +341,11 @@ body {
   animation: slideOutTopRight 0.3s cubic-bezier(0.55, 0.06, 0.68, 0.19);
 }
 
-/* Profile Sidebar Styles (Legacy - keeping for compatibility) */
+/* Profile Sidebar Styles (theme-aware) */
 .profile-sidebar {
-  background-color: #1f2937;
-  border-left: 1px solid #374151;
-  box-shadow: -10px 0 25px -5px rgba(0, 0, 0, 0.4);
+  background-color: var(--card-bg);
+  border-left: 1px solid var(--border);
+  box-shadow: -10px 0 25px -5px var(--shadow);
 }
 
 .profile-sidebar-backdrop {

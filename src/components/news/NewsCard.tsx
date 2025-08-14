@@ -23,8 +23,8 @@ export default function NewsCard({ article, onClick, className = '' }: NewsCardP
 
   return (
     <article 
-      className={`rounded-lg overflow-hidden card-hover cursor-pointer group ${className}`}
-      style={{ backgroundColor: 'var(--card-bg)' }}
+      className={`rounded-lg overflow-hidden card-hover cursor-pointer group with-surface-border ${className}`}
+      style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border)' }}
       onClick={() => onClick(article)}
     >
       <div className="relative">
@@ -33,7 +33,7 @@ export default function NewsCard({ article, onClick, className = '' }: NewsCardP
           alt={article.title}
           width={400}
           height={200}
-          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-200"
+          className="w-full h-40 sm:h-48 object-cover group-hover:scale-105 transition-transform duration-200"
         />
         <div className="absolute top-3 left-3">
           <span className="bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded-full">
