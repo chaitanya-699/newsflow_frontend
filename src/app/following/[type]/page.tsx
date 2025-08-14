@@ -26,7 +26,7 @@ export default function FollowingTypePage() {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Get followed sources of this type
-      const sourceTypeRaw = type.replace('following-', '');
+      const sourceTypeRaw = type;
       const sourceType = sourceTypeRaw === 'all' ? null : sourceTypeRaw as NewsSource['type'];
       const followed = dummySources.filter(source => 
         source.isFollowing && (sourceType === null || source.type === sourceType)
@@ -68,12 +68,12 @@ export default function FollowingTypePage() {
 
   const getTypeInfo = (sourceType: string) => {
     const typeMap = {
-      'following-all': { title: 'All Sources', icon: '📱', description: 'All content from your followed sources' },
-      'following-news': { title: 'News Sites', icon: '📰', description: 'Latest news from your followed news sources' },
-      'following-blog': { title: 'Blogs', icon: '📝', description: 'In-depth articles from your followed blogs' },
-      'following-youtube': { title: 'YouTube Channels', icon: '📺', description: 'Video content from your followed YouTube channels' },
-      'following-newsletter': { title: 'Newsletters', icon: '📧', description: 'Curated content from your followed newsletters' },
-      'following-website': { title: 'Websites', icon: '🌐', description: 'Content from your followed websites' }
+      'all': { title: 'All Sources', icon: '📱', description: 'All content from your followed sources' },
+      'news': { title: 'News Sites', icon: '📰', description: 'Latest news from your followed news sources' },
+      'blog': { title: 'Blogs', icon: '📝', description: 'In-depth articles from your followed blogs' },
+      'youtube': { title: 'YouTube Channels', icon: '📺', description: 'Video content from your followed YouTube channels' },
+      'newsletter': { title: 'Newsletters', icon: '📧', description: 'Curated content from your followed newsletters' },
+      'website': { title: 'Websites', icon: '🌐', description: 'Content from your followed websites' }
     };
     return typeMap[sourceType as keyof typeof typeMap] || { 
       title: 'Following', 
@@ -93,7 +93,7 @@ export default function FollowingTypePage() {
           <span>/</span>
           <Link href="/following" className="hover:text-accent transition-colors">Following</Link>
           <span>/</span>
-          <span className="text-foreground">{typeInfo.title}</span>
+          <span className="text-foreground">{type}</span>
         </nav>
         
         <h1 className="text-3xl font-bold text-foreground mb-2">

@@ -223,7 +223,15 @@ interface Channel {
   url: string;
 }
 
-export default function SearchChannelsContent() {
+export default function SearchChannelsPage() {
+  return (
+    <Suspense fallback={<div className="py-8 text-sm" style={{ color: "var(--text-secondary)" }}>Loading channels...</div>}>
+      <SearchChannelsContent />
+    </Suspense>
+  );
+}
+
+function SearchChannelsContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
 

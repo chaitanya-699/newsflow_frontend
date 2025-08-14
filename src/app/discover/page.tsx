@@ -155,21 +155,24 @@ export default function Discover() {
     return type.charAt(0).toUpperCase() + type.slice(1);
   };
 
-  const handleFilterChange = useCallback((filter: string) => {
-    setActiveFilter(filter);
-    const unfollowedSources = sources.filter(
-      (source) => !followingStates[source.id]
-    );
-
-    if (filter === "All") {
-      setFilteredSources(unfollowedSources);
-    } else {
-      const filterType = filter.toLowerCase() as NewsSource["type"];
-      setFilteredSources(
-        unfollowedSources.filter((source) => source.type === filterType)
+  const handleFilterChange = useCallback(
+    (filter: string) => {
+      setActiveFilter(filter);
+      const unfollowedSources = sources.filter(
+        (source) => !followingStates[source.id]
       );
-    }
-  }, [sources, followingStates]);
+
+      if (filter === "All") {
+        setFilteredSources(unfollowedSources);
+      } else {
+        const filterType = filter.toLowerCase() as NewsSource["type"];
+        setFilteredSources(
+          unfollowedSources.filter((source) => source.type === filterType)
+        );
+      }
+    },
+    [sources, followingStates]
+  );
 
   const getFollowedSources = () => {
     return sources.filter((source) => followingStates[source.id]);
@@ -185,14 +188,30 @@ export default function Discover() {
     setSearchQuery(query);
     setSelectedIndex(-1); // Reset selection when search changes
     if (query.trim() === "") {
-      setSearchResults(dummySearchOptions);
+      setSearchResults([]);
     } else {
-      const filtered = dummySearchOptions.filter(
-        (option) =>
-          option.name.toLowerCase().includes(query.toLowerCase()) ||
-          option.category.toLowerCase().includes(query.toLowerCase()) ||
-          option.type.toLowerCase().includes(query.toLowerCase())
-      );
+      const filtered = dummySearchOptions
+        .filter((option) =>
+          [option.name, option.category, option.type].some((field) =>
+            field.toLowerCase().includes(query.toLowerCase())
+          )
+        )
+        .sort((a, b) => {
+          // Example: prioritize name matches over category/type
+          const queryLower = query.toLowerCase();
+          const aMatch = a.name.toLowerCase().includes(queryLower)
+            ? 0
+            : a.category.toLowerCase().includes(queryLower)
+            ? 1
+            : 2;
+          const bMatch = b.name.toLowerCase().includes(queryLower)
+            ? 0
+            : b.category.toLowerCase().includes(queryLower)
+            ? 1
+            : 2;
+          return aMatch - bMatch;
+        })
+        .slice(0, 4);
       setSearchResults(filtered);
     }
   };
@@ -235,8 +254,6 @@ export default function Discover() {
         break;
     }
   };
-
-
 
   // Update filtered sources when following states change
   useEffect(() => {

@@ -98,11 +98,12 @@ export default function Home() {
           return (
             <div key={category.id} className="slide-up" style={{ animationDelay: `${(index + 1) * 0.2}s` }}>
               <CategorySection
+                name={"category"}
                 title={`${category.icon} ${category.name}`}
                 articles={articles}
                 loading={loading}
                 onArticleClick={onArticleClick}
-                categoryId={category.id}
+                categoryId={"category-"+category.id}
               />
             </div>
           );

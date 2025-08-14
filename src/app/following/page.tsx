@@ -187,6 +187,7 @@ export default function Following() {
           return (
             <div key={sourceType} className="slide-up" style={{ animationDelay: `${(index + 1) * 0.2}s` }}>
               <CategorySection
+                name={"following"}
                 title={`${typeInfo.icon} ${typeInfo.title}`}
                 articles={articles}
                 loading={loading}
